@@ -3,10 +3,10 @@
 ## Flask and Jinja is needed to use this!
 
 First we need a instance of Flask!
- python3 -m venv JINJAenv \n
- pip install flask \n
- pip freeze  ---> to check which packages are installed and can be saved into another file to use later! or make the same virtual invironment \n
- touch hello.py \n
+ `python3 -m venv JINJAenv`
+ `pip install flask`
+ `pip freeze`  ---> to check which packages are installed and can be saved into another file to use later! or make the same virtual invironment 
+ `touch hello.py`
  
 Second we need to introduce a route of website! with python decorator
 Third we need to have index (what should be done in the webpage we want)
