@@ -7,10 +7,11 @@ pages:
   script:
   - mkdir public
   - python hello.py
-  - google-chrome http://127.0.0.1:5000/
+    #- google-chrome http://127.0.0.1:5000/
+  -cd public && touch firstfile
   artifacts:
-     paths:
+    paths:
     - public
-     only:
-    - main
+      # only:
+      #- main
 
