@@ -8,7 +8,7 @@ pages:
   - mkdir public
   - python hello.py
     #- google-chrome http://127.0.0.1:5000/
-  -cd public && touch firstfile
+  - cd public && touch firstfile
   artifacts:
     paths:
     - public
