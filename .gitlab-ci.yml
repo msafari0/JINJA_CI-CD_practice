@@ -5,11 +5,12 @@ before_script:
 
 pages:
   script:
+  - mkdir public
   - python hello.py
   - google-chrome http://127.0.0.1:5000/
-    #  artifacts:
-    # paths:
-    #- public
-    # only:
-    #- master
+  artifacts:
+     paths:
+    - public
+     only:
+    - main
 
