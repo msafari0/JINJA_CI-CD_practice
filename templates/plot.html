@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css" integrity="sha512-fzA+tLgtwjys8FSpEdAGGamBJiWnHCwSkEu5P3EGr73U8AFnOSE1kzI6+RSYvf4zIs5BPWVrdzygD+nvZKbxIg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<title>My chart.js charts</title>
+	
+</head>
+<body>
+	<div class="container">
+	   <canvas id="myChart"></canvas>
+	</div>
+	
+	<script>
+	let myChart = document.getElementById('myChart').getcontext('2d');
+	
+	let masspupChart = new Chart(myChart, {
+	  type:'bar',
+	  data:{
+	        labels:['A','B','C','D'],
+	  options:{}
+	});
+	</script>
+</body>
+</html>
