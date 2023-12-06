@@ -5,8 +5,10 @@ run_test:
     - pip install flask
   script:
     - mkdir public
-    - python hello.py
+    - pip freeze > req.dat
+    - mv req.dat ./public
+    #- python hello.py
     #- google-chrome http://127.0.0.1:5000/
-    - cd public && touch firstfile
+    #- cd public && touch firstfile
       
 
