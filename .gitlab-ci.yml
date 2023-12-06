@@ -3,15 +3,10 @@ run_test:
   image: python:3.11-alpine
   before_script:
     - pip install flask
-      #pages:
   script:
     - mkdir public
     - python hello.py
     #- google-chrome http://127.0.0.1:5000/
     - cd public && touch firstfile
-  artifacts:
-    paths:
-    - public
-  only:
-  - main
+      
 
