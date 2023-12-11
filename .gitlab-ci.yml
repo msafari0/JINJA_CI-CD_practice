@@ -1,5 +1,7 @@
 
 run_test:
+  tags:
+    - docker
   image: python:3.11-alpine
   before_script:
     - pip install flask
@@ -7,7 +9,7 @@ run_test:
     - mkdir public
     - pip freeze > req.dat
     - mv req.dat ./public
-    #- python hello.py
+    - python hello.py
     #- google-chrome http://127.0.0.1:5000/
     #- cd public && touch firstfile
       
