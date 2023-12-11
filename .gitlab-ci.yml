@@ -5,6 +5,7 @@ run_test:
   image: python:3.11-alpine
   before_script:
     - pip install flask
+    - pip install flask-wtf
   script:
     - mkdir public
     - pip freeze > req.dat
