@@ -10,8 +10,23 @@ run_test:
     - mkdir public
     - pip freeze > req.dat
     - mv req.dat ./public
-    - python hello.py
-    #- google-chrome http://127.0.0.1:5000/
-    #- cd public && touch firstfile
+    - python hello.py &
+    - sleep 5  # Wait for Flask to start (adjust as needed)
+    - curl http://127.0.0.1:5000/  # Replace with the correct URL for your Flask app
+    - kill %1  # Stop the background Flask process
       
+html_run_test:
+  tags:
+    - docker
+  image: python:3.11-alpine
+
+  pages:
+    script:
+      - mkdir public
+      - echo "<html><head><title>GitLab Pages</title></head><body><h1>Hello from GitLab Pages!</h1></body></html>" > public/index.html
+    artifacts:
+      paths:
+        - public
+    only:
+      - main
 
