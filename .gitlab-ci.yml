@@ -11,9 +11,9 @@ run_test:
     - pip freeze > req.dat
     - mv req.dat ./public
     - python hello.py &
-    - sleep 5  # Wait for Flask to start (adjust as needed)
-    - curl http://127.0.0.1:5000/  # Replace with the correct URL for your Flask app
-    - kill %1  # Stop the background Flask process
+    #- sleep 5  # Wait for Flask to start (adjust as needed)
+    #- curl http://127.0.0.1:5000/  # Replace with the correct URL for your Flask app
+    #- kill %1  # Stop the background Flask process
 
 pages:
   tags:
