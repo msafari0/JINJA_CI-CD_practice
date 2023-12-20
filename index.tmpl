@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="M. Safari">
+		<meta name="description" content="Benchmark visualisation">
+		<title>QEGPU verification</title>
+		<link rel="icon" href="https://milligram.github.io/images/icon.png">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+		<link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.0/dist/mini-default.min.css">
+	</head>
+	<body>
+
+		<main class="wrapper">
+			<section class="container" id="contributing">
+				<h1 class="title">Benchmark visualisation</h1>
+{% for file, name in entries.items() %}
+				<p><a href="{{file}}" title="Contributing">{{name}}</a></p>
+{% endfor %}
+			</section>
+		</main>
+
+	</body>
+</html>

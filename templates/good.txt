@@ -1,0 +1,10 @@
+{# Command line, templates/good.txt #}
+Hello {{ name }},
+
+{% if score > 80 %}
+I am happy to inform you that you did very well on today's {{ test_name }}. {% else %}
+I am sure you could have been better on today's {{ test_name }}. You just need more studing, less vampire hunting!
+{% endif %} You achieved  {{ score }} out of {{ max_score }} points!
+
+See you tomorrow,
+Ms. Safari
