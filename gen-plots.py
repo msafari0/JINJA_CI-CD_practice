@@ -42,13 +42,8 @@ def gen_plots(filename):
      #   data = json.load(f)
 
     labels = []
-    datasets = {'energy': {'label': ''},
-                'energy_smearing': {'label': ''},
-                'energy_one_electron': {'label': ''},
-                'absolute_magnetization': {'label': ''},
-                'total_magnetization': {'label': ''},
-                'total_force': {'label': ''},
-                'wall_time_seconds': {'label': 'Time (s)'},
+    datasets = {'efficiency': {'label': ''},
+                'runtime_component': {'label': ''},
                }
 
     info = []
@@ -73,27 +68,29 @@ def gen_plots(filename):
 
         labels.append(code)
         for k in list(datasets.keys()):
-          if k in results:
+            if k in results:
               # create data if it does not exist
-              if not datasets[k].get('plots', False):
-                  datasets[k]['plots'] = {}
-                  for i, init_desc in enumerate(descriptions):
-                      datasets[k]['plots'][init_desc]  = { 'data':[], 'accuracy': [], 'color': 'rgba({}, {}, {}, 1)'.format(*colors[i]) }
+                if not datasets[k].get('plots', False):
+                    datasets[k]['plots'] = {}
+                    for i, init_desc in enumerate(descriptions):
+                        datasets[k]['plots'][init_desc]  = { 'data':[], 'accuracy': [], 'color': 'rgba({}, {}, {}, 1)'.format(*colors[i]) }
 
               # Add to reference or test
               add_to_plots(datasets[k]['plots'], description, results[k], results.get(k+'_accuracy', None))
 
-              datasets[k]['min'] = min(datasets[k].get('min', 1e12), results[k])
-              datasets[k]['max'] = max(datasets[k].get('max', -1e12),results[k])
-          else:
-              datasets.pop(k)
-              continue
+                datasets[k]['min'] = min(datasets[k].get('min', 1e12), results[k])
+                
+                
+                datasets[k]['max'] = max(datasets[k].get('max', -1e12),results[k])
+            else:
+                datasets.pop(k)
+                continue
 
-          if not datasets[k]['label']:
-              try:
-                  datasets[k]['label'] = k+' ('+results[k+'_units']+')'
-              except KeyError:
-                  print("Warning, no units for "+k)
+            if not datasets[k]['label']:
+                try:
+                    datasets[k]['label'] = k+' ('+results[k+'_units']+')'
+                except KeyError:
+                print("Warning, no units for "+k)
 
     # Enlarge axis by 5%
     for k in datasets.keys():

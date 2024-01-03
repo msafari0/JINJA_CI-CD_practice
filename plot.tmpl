@@ -17,12 +17,7 @@
 </head>
 <body>
 <h1>{{title}}</h1>
-<h2>Input</h2>
-{%- for entry in info %}
-<pre>
-{{entry}}
-</pre>
-{%- endfor %}
+
 <h2>Results</h2>
   <div style="width:75%;">
 {%- for entry in datasets.keys() %}
@@ -33,24 +28,17 @@
   
 {% for key, entry in datasets.items() %}
     var {{key}}_config = {
-      type: 'bar',
+      type: 'line',
       data: {
         labels: ['{{ labels|join("', '") }}'],
         datasets: [
-{% for label, results in entry['plots'].items() %}
+{% for label, data in entry['plots'].items() %}
         {
           label: '{{label}}',
-          data: {{results.data}},
+          data: {{data}},
           fill: false,
           spanGaps: true,
-          borderColor: "{{results.color}}",
-{% if results.accuracy %}
-          errorBars: {
-{%- for label in labels %}
-          '{{label}}' : {plus: {{results.accuracy[loop.index0]}}, minus: -{{results.accuracy[loop.index0]}}},
-{%- endfor %}
-          }
-{% endif %}
+          borderColor: "{{data.color}}",
         },
 {% endfor %}
         ]

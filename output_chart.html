@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <title>Chart with Data from File</title>
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+
+    <script>
+        async function fetchDataAndPlot() {
+            try {
+                const data = {"Nodes": [4, 8, 16, 32, 64, 128, 256, 512, 1024], "Tasks/Node": [4, 4, 4, 4, 4, 4, 4, 4, 4], "Threads/Task": [8, 8, 8, 8, 8, 8, 8, 8, 8], "dynmat0": [36.58, 34.7, 31.56, 30.7, 31.71, 32.25, 31.81, 31.96, 31.55], "h_psi": [12649.38, 6422.33, 3189.66, 1598.94, 817.76, 415.09, 214.19, 125.36, 98.76], "phqscf": [31770.01, 17837.22, 10570.72, 5290.35, 2700.97, 1375.29, 711.83, 382.94, 223.69], "sth_kernel": [27444.56, 14023.52, 7051.89, 3535.66, 1805.39, 917.08, 474.75, 253.74, 148.51], "walltime": [31860.0, 17880.0, 10620.0, 5340.0, 2733.14, 1401.46, 757.98, 447.93, 319.31]};
+
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const datasets = Object.keys(data).map(key => ({
+                label: key,
+                data: data[key],
+                backgroundColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`,
+            }));
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data['Nodes'],
+                        datasets: datasets,
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                stacked: true
+                            },
+                            y: {
+                                stacked: true
+                            }
+                        }
+                    },
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        fetchDataAndPlot();
+    </script>
+</body>
+</html>
+
