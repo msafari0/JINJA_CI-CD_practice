@@ -3,7 +3,6 @@ import jinja2
 import os
 import csv
 import pandas as pd
-from flask import Flask, render_template
 
 def render_index(tpl_path, context):
     path, filename = os.path.split(tpl_path)
