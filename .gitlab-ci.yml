@@ -5,22 +5,20 @@ run_test:
   image: python:3.11-alpine
   before_script:
     - pip install flask
-    - pip install flask-wtf
+    - pip install jinja2
   script:
-    - mkdir public
-    - pip freeze > req.dat
-    - mv req.dat ./public
     - python hello.py &
-    #- sleep 5  # Wait for Flask to start (adjust as needed)
-    #- curl http://127.0.0.1:5000/  # Replace with the correct URL for your Flask app
-    #- kill %1  # Stop the background Flask process
 
-pages:
+pages:      
   tags:
     - docker
+  before_script:
+    - pip install jinja2
+    - pip install pandas
   script:
     - mkdir public
-    - echo "<html><head><title>GitLab Pages</title></head><body><h1>Hello from GitLab Pages!</h1></body></html>" > public/index.html
+    - python Chart_template.py
+    - mv *.html ./public
   artifacts:
     paths:
       - public
