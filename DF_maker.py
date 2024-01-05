@@ -74,21 +74,10 @@ def dataframes_maker(dataframes_list, **kwargs):
         else:
             print(f"Error: Invalid time unit '{time_unit}' specified.")
         
-      
-        # Add another element named "Plots" with specific columns
-        plot_columns1 = [df_dict['x_axis'], f'other components ({df_name})', f'{column_name} of ({df_name})']  # Replace with actual columns
-        loaded_dataframes[df_name]['Plot_runtime'] = loaded_dataframes[df_name][plot_columns1].to_dict(orient='records')
-        # Add another element named "Plots" with specific columns
-        plot_columns2 = [df_dict['x_axis'],f'efficiency of {efficiency}']  # Replace with actual columns
-        loaded_dataframes[df_name]['Plot_efficiency'] = loaded_dataframes[df_name][plot_columns2].to_dict(orient='records')
-
-        # Save DataFrame to JSON file
-        json_filename = f'{df_name}.json'
-        loaded_dataframes[df_name].to_json(json_filename, orient='records')
         
         # Save DataFrame to text file (tab-separated, change separator if needed)
         txt_filename = f'{df_name}.txt'
-        loaded_dataframes[df_name].to_csv(txt_filename, sep='\t', index=False)
+        loaded_dataframes[df_name].to_csv(txt_filename, sep=',', index=False)
 
             
     return loaded_dataframes

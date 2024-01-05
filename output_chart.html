@@ -13,14 +13,14 @@
 
     <script>
         // Use triple curly braces to prevent Jinja from escaping characters
-        const modifiedData = {"Nodes": [4, 8, 16, 32, 64, 128, 256, 512, 1024], "Tasks/Node": [4, 4, 4, 4, 4, 4, 4, 4, 4], "Threads/Task": [8, 8, 8, 8, 8, 8, 8, 8, 8], "dynmat0": [36.58, 34.7, 31.56, 30.7, 31.71, 32.25, 31.81, 31.96, 31.55], "h_psi": [12649.38, 6422.33, 3189.66, 1598.94, 817.76, 415.09, 214.19, 125.36, 98.76], "phqscf": [31770.01, 17837.22, 10570.72, 5290.35, 2700.97, 1375.29, 711.83, 382.94, 223.69], "result_column": [19210.620000000003, 11457.67, 7430.34, 3741.06, 1915.3799999999999, 986.3700000000001, 543.79, 322.57, 220.55], "sth_kernel": [27444.56, 14023.52, 7051.89, 3535.66, 1805.39, 917.08, 474.75, 253.74, 148.51], "walltime": [31860.0, 17880.0, 10620.0, 5340.0, 2733.14, 1401.46, 757.98, 447.93, 319.31]};
+        const modifiedData = {"Nodes": [1, 2, 4], "Tasks/Node": [4, 4, 4], "Threads/Task": [8, 8, 8], "cbands": [42.58, 41.54, 38.81], "cdiaghg": [10.13, 10.6, 11.12], "efficiency of electrons": [100.0, 52.56663376110563, 28.49422089041096], "electrons": [53.25, 50.65, 46.72], "electrons of (df_1)": [53.25, 50.65, 46.72], "h_psi": [15.3, 20.46, 20.02], "other components (df_1)": [6.770000000000003, 5.920000000000002, 9.120000000000005], "result_column": [44.72, 36.11, 35.82000000000001], "speedup": [1.0, 1.0513326752221126, 1.1397688356164384], "vloc_psi": [10.86, 15.86, 15.42], "walltime": [60.02, 56.57, 55.84]};
 
         const ctx = document.getElementById('myChart').getContext('2d');
 
         // Extract the columns you want to plot
         const nodes = modifiedData['Nodes'].map(String);
-        const dataColumn2 = modifiedData['h_psi'];
-        const dataResultColumn = modifiedData['result_column'];
+        const dataColumn2 = modifiedData['electrons'];
+        const dataResultColumn = modifiedData['other components (df_2)'];
 
         // Your JavaScript code for creating the chart using specific columns
         new Chart(ctx, {
@@ -29,12 +29,12 @@
                 labels: nodes,
                 datasets: [
                       {
-                        label: 'Other component runtime',
+                        label: 'Other component runtime (df_2)',
                         data: dataResultColumn,
                         backgroundColor: 'rgba(0, 0, 255, 0.7)',
                     },
                     {
-                        label: 'h_psi',
+                        label: 'electrons',
                         data: dataColumn2,
                         backgroundColor: 'rgba(0, 255, 0, 0.7)',
                     },

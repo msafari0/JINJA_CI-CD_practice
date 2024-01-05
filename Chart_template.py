@@ -3,6 +3,9 @@ import jinja2
 import os
 import csv
 import pandas as pd
+import json
+from DF_maker import dataframes_maker
+
 
 def render_index(tpl_path, context):
     path, filename = os.path.split(tpl_path)
@@ -13,7 +16,7 @@ def render_index(tpl_path, context):
     return environment.get_template(filename).render(context)
 
 
-def render_template(template_path, output_path, context):
+def render_template(template_path, output_path, context, file_path=None, column_names=None):
     # Load the template environment
     template_loader = jinja2.FileSystemLoader(searchpath=os.path.dirname(template_path))
     template_env = jinja2.Environment(loader=template_loader, autoescape=True)
@@ -23,13 +26,12 @@ def render_template(template_path, output_path, context):
     template_env.filters['load_csv_data'] = load_csv_data
     
     # Function to modify the CSV data
-    def modify_csv_data(file_path):
+    def modify_csv_data(file_path, column_names):
         # Read CSV into a DataFrame
         df = pd.read_csv(file_path)
 
-        # Perform the modification (subtract column2 from column1)
-        df['result_column'] = df['walltime'] - df['h_psi']
-
+        df['component1'] = df[column_names[file_path]['component1']]
+        df['component2'] = df[column_names[file_path]['component2']]
         # You can perform other modifications as needed
 
         # Convert the DataFrame to a dictionary
@@ -37,12 +39,14 @@ def render_template(template_path, output_path, context):
 
         return modified_data
 
-    # Register the function as a Jinja filter
+# Register the function as a Jinja filter
     template_env.filters['modify_csv_data'] = modify_csv_data
     # Load the template
     template = template_env.get_template(os.path.basename(template_path))
     
-    
+    # Include the file_path in the context
+    context['file_path'] = file_path
+    context['column_names'] = column_names
     # Render the template with the provided context
     output_html = template.render(context)
 
@@ -61,44 +65,44 @@ def gen_index(flist):
         #n+=1
     with open ('index.html', 'w') as f:
         f.write(render_index('index.tmpl', {'entries': entries}))
-
+        
 if __name__ == "__main__":
     # Define the data for filling in the template
     page_title = "Chart with Data from File"
-    data_file_path = "./results.dat"
-    
-    datasets = [
-        #{'label': 'phqscf', 'name': 'phqscf', 'index': 3, 'backgroundColor': 'rgba(255, 0, 0, 0.7)'},
-        #{'label': 'dynmat0', 'name': 'dynmat0', 'index': 4, 'backgroundColor': 'rgba(0, 255, 0, 0.7)'},
-        #{'label': 'sth_kernel', 'name': 'sth_kernel', 'index': 5, 'backgroundColor': 'rgba(0, 0, 255, 0.7)'},
-        #{'label': 'h_psi', 'name': 'h_psi', 'index': 6, 'backgroundColor': 'rgba(255, 165, 0, 0.7)'},
+    # Specify the filenames and associated column names
+    dataframes_list = [
+    {'filename': '/home/mandanas/1-CINECA-projects/benchmark/benchmark_10it/bench_7.2dev_gpua_iter/000000/result/result.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes', 'time_unit':'second'},
+    {'filename': '/home/mandanas/1-CINECA-projects/benchmark/benchmark_10it/bench_7.2dev_nogpua_iter/000000/result/result.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes','time_unit':'second'},
+    {'filename': 'results.dat', 'column_name': 'sth_kernel', 'efficiency':'sth_kernel', 'x_axis':'Nodes', 'time_unit':'second'}
     ]
+    dataframes = dataframes_maker(dataframes_list)
 
+    data_file_path = ["./df_1.txt", "./df_2.txt", "./df_3.txt"]
+    
     # Define the output path for the rendered HTML
-    output_path = "./output_chart.html"
+    output_path = ["./output_chart1.html", "./output_chart2.html", "./output_chart3.html"]
+
+    # Define the column names for each file
+    column_names = {
+        "./df_1.txt": {'component1': 'electrons', 'component2': 'other components (df_1)'},
+        "./df_2.txt": {'component1': 'electrons', 'component2': 'other components (df_2)'},
+        "./df_3.txt": {'component1': 'sth_kernel', 'component2': 'other components (df_3)'},
+    }
 
     # Create the context to be used in the template
     context = {
         'page_title': page_title,
-        'data_file_path': data_file_path,
-        'datasets': datasets,
+        'output_path': output_path,
     }
-
     # Render the template and save the output HTML
-    #render_template("chart.tmpl", output_path, context)
     filenames = []
-    filenames.append(output_path)
-    #print(filenames)
-    flist = []
-    for filename in list(filenames):
-        render_template("chart_modify.tmpl", output_path, context)
-        filenames.append(output_path)
-        flist.append(filename)
+    for file_path, output_file in list(zip(data_file_path, output_path)):
+        render_template("chart_modify.tmpl", output_file, context, file_path=file_path, column_names = column_names)
+        print(file_path)
+        filenames.append(output_file)
 
-    gen_index(flist)
+    gen_index(filenames)
+
     
     print(f"Template has been rendered and saved to {output_path}")
-
-
-
-
+#it works!

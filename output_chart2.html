@@ -13,7 +13,7 @@
 
 <script>
     // Use triple curly braces to prevent Jinja from escaping characters
-    const jsonData = {{ file_path | modify_csv_data(column_names) | tojson | safe }};
+    const jsonData = {"Nodes": [1, 2, 4], "Tasks/Node": [4, 4, 4], "Threads/Task": [8, 8, 8], "cbands": [66.43, 39.25, 40.22], "cdiaghg": [12.25, 12.33, 13.77], "component1": [82.8, 47.46, 47.94], "component2": [7.260000000000005, 9.589999999999996, 5.060000000000002], "efficiency of electrons": [100.0, 87.23135271807838, 43.178973717146434], "electrons": [82.8, 47.46, 47.94], "electrons of (df_2)": [82.8, 47.46, 47.94], "h_psi": [37.26, 17.93, 19.36], "other components (df_2)": [7.260000000000005, 9.589999999999996, 5.060000000000002], "speedup": [1.0, 1.7446270543615676, 1.7271589486858574], "vloc_psi": [33.99, 15.14, 16.46], "walltime": [90.06, 57.05, 53.0]};
 
     const ctx = document.getElementById('myChart').getContext('2d');
 
