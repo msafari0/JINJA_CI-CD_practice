@@ -13,7 +13,7 @@
     <script>
         async function fetchDataAndPlot() {
             try {
-                const data = {{ data_file_path | load_csv_data | tojson | safe }};
+                const data = {{ data_file_path | modify_csv_data | tojson | safe }};
 
                 const ctx = document.getElementById('myChart').getContext('2d');
                 const datasets = Object.keys(data).map(key => ({

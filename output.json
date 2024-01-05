@@ -1,0 +1,92 @@
+[
+  {
+    "Nodes": "4",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "31770.01",
+    "dynmat0": "36.58",
+    "sth_kernel": "27444.56",
+    "h_psi": "12649.38",
+    "walltime": "31860.00"
+  },
+  {
+    "Nodes": "8",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "17837.22",
+    "dynmat0": "34.70",
+    "sth_kernel": "14023.52",
+    "h_psi": "6422.33",
+    "walltime": "17880.00"
+  },
+  {
+    "Nodes": "16",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "10570.72",
+    "dynmat0": "31.56",
+    "sth_kernel": "7051.89",
+    "h_psi": "3189.66",
+    "walltime": "10620.00"
+  },
+  {
+    "Nodes": "32",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "5290.35",
+    "dynmat0": "30.70",
+    "sth_kernel": "3535.66",
+    "h_psi": "1598.94",
+    "walltime": "5340.00"
+  },
+  {
+    "Nodes": "64",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "2700.97",
+    "dynmat0": "31.71",
+    "sth_kernel": "1805.39",
+    "h_psi": "817.76",
+    "walltime": "2733.14"
+  },
+  {
+    "Nodes": "128",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "1375.29",
+    "dynmat0": "32.25",
+    "sth_kernel": "917.08",
+    "h_psi": "415.09",
+    "walltime": "1401.46"
+  },
+  {
+    "Nodes": "256",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "711.83",
+    "dynmat0": "31.81",
+    "sth_kernel": "474.75",
+    "h_psi": "214.19",
+    "walltime": "757.98"
+  },
+  {
+    "Nodes": "512",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "382.94",
+    "dynmat0": "31.96",
+    "sth_kernel": "253.74",
+    "h_psi": "125.36",
+    "walltime": "447.93"
+  },
+  {
+    "Nodes": "1024",
+    "Tasks/Node": "4",
+    "Threads/Task": "8",
+    "phqscf": "223.69",
+    "dynmat0": "31.55",
+    "sth_kernel": "148.51",
+    "h_psi": "98.76",
+    "walltime": "319.31"
+  }
+]

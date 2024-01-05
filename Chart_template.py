@@ -21,6 +21,24 @@ def render_template(template_path, output_path, context):
     def load_csv_data(file_path):
         return pd.read_csv(file_path).to_dict(orient='list')
     template_env.filters['load_csv_data'] = load_csv_data
+    
+    # Function to modify the CSV data
+    def modify_csv_data(file_path):
+        # Read CSV into a DataFrame
+        df = pd.read_csv(file_path)
+
+        # Perform the modification (subtract column2 from column1)
+        df['result_column'] = df['walltime'] - df['h_psi']
+
+        # You can perform other modifications as needed
+
+        # Convert the DataFrame to a dictionary
+        modified_data = df.to_dict(orient='list')
+
+        return modified_data
+
+    # Register the function as a Jinja filter
+    template_env.filters['modify_csv_data'] = modify_csv_data
     # Load the template
     template = template_env.get_template(os.path.basename(template_path))
     
@@ -50,10 +68,10 @@ if __name__ == "__main__":
     data_file_path = "./results.dat"
     
     datasets = [
-        {'label': 'phqscf', 'name': 'phqscf', 'index': 3, 'backgroundColor': 'rgba(255, 0, 0, 0.7)'},
-        {'label': 'dynmat0', 'name': 'dynmat0', 'index': 4, 'backgroundColor': 'rgba(0, 255, 0, 0.7)'},
-        {'label': 'sth_kernel', 'name': 'sth_kernel', 'index': 5, 'backgroundColor': 'rgba(0, 0, 255, 0.7)'},
-        {'label': 'h_psi', 'name': 'h_psi', 'index': 6, 'backgroundColor': 'rgba(255, 165, 0, 0.7)'},
+        #{'label': 'phqscf', 'name': 'phqscf', 'index': 3, 'backgroundColor': 'rgba(255, 0, 0, 0.7)'},
+        #{'label': 'dynmat0', 'name': 'dynmat0', 'index': 4, 'backgroundColor': 'rgba(0, 255, 0, 0.7)'},
+        #{'label': 'sth_kernel', 'name': 'sth_kernel', 'index': 5, 'backgroundColor': 'rgba(0, 0, 255, 0.7)'},
+        #{'label': 'h_psi', 'name': 'h_psi', 'index': 6, 'backgroundColor': 'rgba(255, 165, 0, 0.7)'},
     ]
 
     # Define the output path for the rendered HTML
@@ -73,7 +91,7 @@ if __name__ == "__main__":
     #print(filenames)
     flist = []
     for filename in list(filenames):
-        render_template("chart.tmpl", output_path, context)
+        render_template("chart_modify.tmpl", output_path, context)
         filenames.append(output_path)
         flist.append(filename)
 

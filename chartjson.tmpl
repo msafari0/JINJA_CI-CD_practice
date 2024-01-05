@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <title>Chart with Data from File</title>
+</head>
+<body>
+
+    <canvas id="myChart"></canvas>
+
+    <script>
+        // Use triple curly braces to prevent Jinja from escaping characters
+        const jsonData = {{ your_json_data_variable | tojson | safe }};
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        // Your existing JavaScript code for creating the chart
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: jsonData[0].Nodes.map(String),
+                datasets: jsonData.map(entry => ({
+                    label: `Nodes: ${entry.Nodes}`,
+                    data: entry["Plot_runtime"]["electrons of (df_1)"],
+                    backgroundColor: `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`,
+                })),
+            },
+            options: {
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            },
+        });
+    </script>
+
+</body>
+</html>
+
+
+
