@@ -20,6 +20,7 @@ pages:
     - mkdir public
     - python Chart_template.py
     - mv *.html ./public
+    - cp *.jpg ./public
   artifacts:
     paths:
       - public
