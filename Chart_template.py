@@ -12,7 +12,10 @@ def render_index(tpl_path, context):
 
     environment = jinja2.Environment(undefined=jinja2.StrictUndefined,
         loader=jinja2.FileSystemLoader(path or '.')) #It means jinja will take templates of environment from file in the introduced path
-
+    # Include url_for_index in the context
+    context['url_for_index'] = 'index.html'
+    context['url_for_user'] = 'user.html'
+    context['url_for_name'] = 'name.html'
     return environment.get_template(filename).render(context)
 
 
@@ -71,23 +74,23 @@ if __name__ == "__main__":
     page_title = "Chart with Data from File"
     # Specify the filenames and associated column names
     dataframes_list = [
-  #  {'filename': '/home/mandanas/1-CINECA-projects/benchmark/benchmark_10it/bench_7.2dev_gpua_iter/000000/result/result.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes', 'time_unit':'second'},
- #   {'filename': '/home/mandanas/1-CINECA-projects/benchmark/benchmark_10it/bench_7.2dev_nogpua_iter/000000/result/result.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes','time_unit':'second'},
+    {'filename': '/home/mandanas/1-CINECA-projects/benchmark/benchmark_10it/bench_7.2dev_gpua_iter/000000/result/result.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes', 'time_unit':'second'},
+    {'filename': '/home/mandanas/1-CINECA-projects/benchmark/benchmark_10it/bench_7.2dev_nogpua_iter/000000/result/result.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes','time_unit':'second'},
     {'filename': 'results.dat', 'column_name': 'sth_kernel', 'efficiency':'sth_kernel', 'x_axis':'Nodes', 'time_unit':'second'}
     ]
     dataframes = dataframes_maker(dataframes_list)
 
-    data_file_path = [#"./df_1.txt", "./df_2.txt",
+    data_file_path = ["./df_1.txt", "./df_2.txt",
      "./df_3.txt"]
     
     # Define the output path for the rendered HTML
-    output_path = [#"./output_chart1.html", "./output_chart2.html", 
+    output_path = ["./output_chart1.html", "./output_chart2.html", 
     "./output_chart3.html"]
 
     # Define the column names for each file
     column_names = {
-        #"./df_1.txt": {'component1': 'electrons', 'component2': 'other components (df_1)'},
-        #"./df_2.txt": {'component1': 'electrons', 'component2': 'other components (df_2)'},
+        "./df_1.txt": {'component1': 'electrons', 'component2': 'other components (df_1)'},
+        "./df_2.txt": {'component1': 'electrons', 'component2': 'other components (df_2)'},
         "./df_3.txt": {'component1': 'sth_kernel', 'component2': 'other components (df_3)'},
     }
 

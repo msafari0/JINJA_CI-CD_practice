@@ -17,8 +17,10 @@
 
 		<main class="wrapper">
 			<section class="container" id="contributing">
-				<h1 class="title">Benchmark visualisation results!</h1>
-
+				<h1 class="title">Benchmark visualisation</h1>
+{% for file, name in entries.items() %}
+				<p><a href="{{file}}" title="Contributing">{{name}}</a></p>
+{% endfor %}
 			</section>
 		</main>
 
