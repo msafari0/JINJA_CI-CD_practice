@@ -6,16 +6,40 @@ import pandas as pd
 import json
 from DF_maker import dataframes_maker
 
-
 def render_index(tpl_path, context):
     path, filename = os.path.split(tpl_path)
 
     environment = jinja2.Environment(undefined=jinja2.StrictUndefined,
-        loader=jinja2.FileSystemLoader(path or '.')) #It means jinja will take templates of environment from file in the introduced path
+    loader=jinja2.FileSystemLoader(path or '.')) #It means jinja will take templates of environment from file in the introduced path
+    # Include url_for_.... in the context
+    context['url_for_index'] = 'index.html'
+    context['url_for_qe'] = 'qe.html'
+    context['url_for_yambo'] = 'yambo.html'
+    
+    return environment.get_template(filename).render(context)
+
+def render_qe(tpl_path, context):
+    path, filename = os.path.split(tpl_path)
+
+    environment = jinja2.Environment(undefined=jinja2.StrictUndefined,
+    loader=jinja2.FileSystemLoader(path or '.')) #
+    # Include url_for_... in the context
+    context['url_for_index'] = 'index.html'
+    context['url_for_qe'] = 'qe.html'
+    context['url_for_yambo'] = 'yambo.html'
+
+    return environment.get_template(filename).render(context)
+
+def render_yambo(tpl_path, context):
+    path, filename = os.path.split(tpl_path)
+
+    environment = jinja2.Environment(undefined=jinja2.StrictUndefined,
+    loader=jinja2.FileSystemLoader(path or '.')) #
     # Include url_for_index in the context
     context['url_for_index'] = 'index.html'
-    context['url_for_user'] = 'user.html'
-    context['url_for_name'] = 'name.html'
+    context['url_for_qe'] = 'qe.html'
+    context['url_for_yambo'] = 'yambo.html'
+    
     return environment.get_template(filename).render(context)
 
 
@@ -69,6 +93,30 @@ def gen_index(flist):
     with open ('index.html', 'w') as f:
         f.write(render_index('index.tmpl', {'entries': entries}))
         
+def gen_qe(flist):
+    entries = {}
+    #n=0
+    for filename in flist:
+        _, basename = os.path.split(filename)
+        name, _ = os.path.splitext(basename)
+        entries[name+'.html'] = name
+        #entries[name+f'{n}'+'.html'] = name+f'{n}'
+        #n+=1
+    with open ('qe.html', 'w') as f:
+        f.write(render_qe('qe.tmpl', {'entries': entries}))
+        
+def gen_yambo(flist):
+    entries = {}
+    #n=0
+    for filename in flist:
+        _, basename = os.path.split(filename)
+        name, _ = os.path.splitext(basename)
+        entries[name+'.html'] = name
+        #entries[name+f'{n}'+'.html'] = name+f'{n}'
+        #n+=1
+    with open ('yambo.html', 'w') as f:
+        f.write(render_yambo('yambo.tmpl', {'entries': entries}))
+        
 if __name__ == "__main__":
     # Define the data for filling in the template
     page_title = "Chart with Data from File"
@@ -80,13 +128,11 @@ if __name__ == "__main__":
     ]
     dataframes = dataframes_maker(dataframes_list)
 
-    data_file_path = ["./df_1.txt", "./df_2.txt",
-     "./df_3.txt"]
+    data_file_path = ["./df_1.txt", "./df_2.txt", "./df_3.txt"]
     
     # Define the output path for the rendered HTML
-    output_path = ["./output_chart1.html", "./output_chart2.html", 
-    "./output_chart3.html"]
-
+    output_path = ["./output_chart1.html", "./output_chart2.html", "./output_chart3.html"]
+    code = ['Quantum ESPRESSO', 'Yambo']
     # Define the column names for each file
     column_names = {
         "./df_1.txt": {'component1': 'electrons', 'component2': 'other components (df_1)'},
@@ -98,6 +144,7 @@ if __name__ == "__main__":
     context = {
         'page_title': page_title,
         'output_path': output_path,
+       # 'code': code,
     }
     # Render the template and save the output HTML
     filenames = []
@@ -107,7 +154,10 @@ if __name__ == "__main__":
         filenames.append(output_file)
 
     gen_index(filenames)
-
+    gen_qe(filenames)
+    gen_yambo(filenames)
     
     print(f"Template has been rendered and saved to {output_path}")
 #it works!
+    
+    
