@@ -1,30 +1,18 @@
-<!nav class="navbar navbar-expand-lg bg-body-tertiary">
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
-<!nav class="navbar navbar-dark bg-dark">
+<nav class="navbar bg-dark navbar-expand-sm border-bottom border-body">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand btn text-light mb-0 h1" style="font-size: 32px;" href="{{ url_for_index }}">Benchmark visualisation</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('user', name='John') }}">User Profiles</a>
+          <a class="nav-link btn text-light" style="font-size: 22px;" href="{{ url_for_qe }}">Quantum Espresso</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('name') }}">Name</a>
+         <li class="nav-item">
+          <a class="nav-link btn text-light" style="font-size: 22px;" href="{{ url_for_yambo }}">Yambo</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-        </li>
-
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>

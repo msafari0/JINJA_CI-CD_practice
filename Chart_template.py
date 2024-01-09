@@ -5,6 +5,7 @@ import csv
 import pandas as pd
 import json
 from DF_maker import dataframes_maker
+import shutil
 
 def render_index(tpl_path, context):
     path, filename = os.path.split(tpl_path)
@@ -91,7 +92,7 @@ def gen_index(flist):
         #entries[name+f'{n}'+'.html'] = name+f'{n}'
         #n+=1
     with open ('index.html', 'w') as f:
-        f.write(render_index('index.tmpl', {'entries': entries}))
+        f.write(render_index('templates/index.tmpl', {'entries': entries}))
         
 def gen_qe(flist):
     entries = {}
@@ -103,7 +104,7 @@ def gen_qe(flist):
         #entries[name+f'{n}'+'.html'] = name+f'{n}'
         #n+=1
     with open ('qe.html', 'w') as f:
-        f.write(render_qe('qe.tmpl', {'entries': entries}))
+        f.write(render_qe('templates/qe.tmpl', {'entries': entries}))
         
 def gen_yambo(flist):
     entries = {}
@@ -115,16 +116,16 @@ def gen_yambo(flist):
         #entries[name+f'{n}'+'.html'] = name+f'{n}'
         #n+=1
     with open ('yambo.html', 'w') as f:
-        f.write(render_yambo('yambo.tmpl', {'entries': entries}))
+        f.write(render_yambo('templates/yambo.tmpl', {'entries': entries}))
         
 if __name__ == "__main__":
     # Define the data for filling in the template
     page_title = "Chart with Data from File"
     # Specify the filenames and associated column names
     dataframes_list = [
-    {'filename': 'result0.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes', 'time_unit':'second'},
-    {'filename': 'result1.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes','time_unit':'second'},
-    {'filename': 'results.dat', 'column_name': 'sth_kernel', 'efficiency':'sth_kernel', 'x_axis':'Nodes', 'time_unit':'second'}
+    {'filename': 'data/result0.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes', 'time_unit':'second'},
+    {'filename': 'data/result1.dat', 'column_name': 'electrons', 'efficiency':'electrons', 'x_axis':'Nodes','time_unit':'second'},
+    {'filename': 'data/results.dat', 'column_name': 'sth_kernel', 'efficiency':'sth_kernel', 'x_axis':'Nodes', 'time_unit':'second'}
     ]
     dataframes = dataframes_maker(dataframes_list)
 
@@ -149,7 +150,7 @@ if __name__ == "__main__":
     # Render the template and save the output HTML
     filenames = []
     for file_path, output_file in list(zip(data_file_path, output_path)):
-        render_template("chart_modify.tmpl", output_file, context, file_path=file_path, column_names = column_names)
+        render_template("templates/chart_modify.tmpl", output_file, context, file_path=file_path, column_names = column_names)
         print(file_path)
         filenames.append(output_file)
 
