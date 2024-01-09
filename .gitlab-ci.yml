@@ -18,6 +18,8 @@ pages:
     - pip install pandas
   script:
     - mkdir public
+    - cp *.jpj ./public
+    - cp *.png ./public
     - python Chart_template.py
     - mv *.html ./public
   artifacts:
