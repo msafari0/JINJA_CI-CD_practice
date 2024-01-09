@@ -1,0 +1,4 @@
+Nodes,Tasks/Node,Threads/Task,electrons,cbands,cdiaghg,vloc_psi,h_psi,walltime
+1,4,8,53.25,42.58,10.13,10.86,15.30,60.02
+2,4,8,50.65,41.54,10.60,15.86,20.46,56.57
+4,4,8,46.72,38.81,11.12,15.42,20.02,55.84
