@@ -21,6 +21,7 @@ pages:
     - python Chart_template.py
     - mv *.html ./public
     - cp *.jpg ./public
+    - cp *.png ./public
   artifacts:
     paths:
       - public
