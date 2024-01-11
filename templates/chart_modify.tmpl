@@ -9,22 +9,19 @@
 </head>
 <body>
 
-    <canvas id="myChart"></canvas>
+<canvas id="myChart"></canvas>
 
 <script>
     // Use triple curly braces to prevent Jinja from escaping characters
-    const jsonData = {{ file_path | modify_csv_data(column_names) | tojson | safe }};
+    const jsonData = {{ dataframe | load_csv_data | tojson | safe }};
+
 
     const ctx = document.getElementById('myChart').getContext('2d');
 
     // Extract the columns you want to plot
-    const nodes = jsonData['Nodes'].map(String);
-    const datacomponent1 = jsonData['component1'];
-    const datacomponent2 = jsonData['component2'];
-    // Your JavaScript code for creating the chart using specific columns
-    // Define labels dynamically based on variables
-    const label1 = 'Sth_kernel';
-    const label2 = 'Other Components';
+    const nodes = jsonData['{{ Lx_axis }}'].map(String);
+    const data1 = jsonData['{{ Lcolumn_name }}'];
+    //const data2 = jsonData['{{ Lcomponent }}'];
     
     new Chart(ctx, {
         type: 'bar',
@@ -32,15 +29,15 @@
             labels: nodes,
             datasets: [
                 {
-                    label: label1,
-                    data: datacomponent1,
+                    label: '{{ Lcolumn_name }}',
+                    data: data1,
                     backgroundColor: 'rgba(0, 255, 0, 0.7)',
                 },
-                {
-                    label: label2,
-                    data: datacomponent2,
-                    backgroundColor: 'rgba(0, 0, 255, 0.7)',
-                },
+               // {
+                 //   label: '{{ Lcomponent }}',
+                   // data: data2,
+                   // backgroundColor: 'rgba(0, 0, 255, 0.7)',
+               // },
             ],
         },
         options: {
@@ -55,7 +52,6 @@
         },
     });
 </script>
-
-
 </body>
 </html>
+
