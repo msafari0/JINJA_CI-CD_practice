@@ -148,7 +148,7 @@ def code_recogniser(file_path, keywords):
     found_keywords = [folder for folder in folders if any(keyword.lower() in folder.lower() for keyword in keywords)]
 
     if found_keywords:
-        print(f"Found keywords {found_keywords} in the folder path.")
+        #print(f"Found keywords {found_keywords} in the folder path.")
         return found_keywords[0]
     else:
         print(f"No specified keywords found in the file path.")
@@ -181,11 +181,19 @@ def dataframes_maker(dataframes_list, **kwargs):
 
 if __name__ == "__main__":
     # Define the data for filling in the template
-    page_title = "Chart with Data from File"
+    page_title = "Benchmarking results"
+    print('Welcome Message:')
+    print('\t Flask code for visualizing benchmark results of the MAX project.')
+    print('Arguments:')
+    print('\tfile_names path, x_axis, column_name, time_unit, component')
+    print('More information with: python Chart_template.py --help')
+    print('Author: Mandana Safari \n')
 
-    parser = argparse.ArgumentParser(description='Count the number of files in a directory and process individual file arguments.')
-    parser.add_argument('--directory', '-d', type=str, help='Path to the directory (optional)')
-    parser.add_argument('--files', nargs='+', type=str, help='List of file specifications X_AXIS, COLUMN_NAME, TIME_UNIT, COMPONENT')
+
+    
+    parser = argparse.ArgumentParser(description='Flask code for visualizing benchmark results of the MAX project.')
+    parser.add_argument('--directory', '-d', type=str, help='Path to the directory containing files')
+    parser.add_argument('--files', nargs='+', type=str, help='List of file paths with associated x_axis, column_name, time_unit, and component (use equal sign to separate file path and arguments)')
     parser.add_argument('--x_axis', type=str, help='X-axis variable (optional) for all the files in a directory')
     parser.add_argument('--column_name', type=str, help='Column name for plotting (optional) for all the files in a directory')
     parser.add_argument('--time_unit', type=str, help='Time unit for plotting (optional) for all the files in a directory')
@@ -243,7 +251,7 @@ if __name__ == "__main__":
     else:
         print("Please provide either --directory or file paths as arguments.")
 
-    print(dataframes_list)
+    #print(dataframes_list)
 
     loaded_dataframes = dataframes_maker(dataframes_list)
 
@@ -263,9 +271,9 @@ if __name__ == "__main__":
         code = df_info['code']
         output_path = df_info['output_path']
 
-        print(f"Processing dataframe: {df_name}")
-        print(f"X-axis: {x_axis}, Column Name: {column_name}, Time Unit: {time_unit}, Component: {component}, Code: {code}")
-        print(dataframe)
+        #print(f"Processing dataframe: {df_name}")
+        #print(f"X-axis: {x_axis}, Column Name: {column_name}, Time Unit: {time_unit}, Component: {component}, Code: {code}")
+        #print(dataframe)
         #render_template("templates/chart_modify.tmpl", output_path, context, dataframe=dataframe, column_name = column_name)
         render_template("templates/chart_modify.tmpl", dataframe, df_info, context)
         filenames.append(output_path)
