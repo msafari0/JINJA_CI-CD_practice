@@ -55,24 +55,14 @@ def render_template(template_path, entry, entry_info, context):
 
     template_env.filters['load_csv_data'] = load_csv_data
 
+    def to_list(series):
+        return series.tolist()
+    
+    template_env.filters['to_list'] = to_list
+
     context['Lx_axis'] = entry_info['x_axis']
     context['Lcolumn_name'] = entry_info['column_name']
     context['Lcomponent'] = entry_info['component']
-    # Function to modify the CSV data
-    def modify_csv_data(entry):
-        df = entry
-        df['x_axis'] = entry['x_axis']
-        df['column_name'] = entry['column_name']
-        df['component'] = entry['component']
-        # You can perform other modifications as needed
-
-        # Convert the DataFrame to a dictionary
-        modified_data = df.to_dict(orient='list')
-
-        return modified_data
-
-    # Register the function as a Jinja filter
-    template_env.filters['modify_csv_data'] = modify_csv_data
 
     # Load the template
     template = template_env.get_template(os.path.basename(template_path))
@@ -81,8 +71,10 @@ def render_template(template_path, entry, entry_info, context):
     context['dataframe'] = entry
     context['x'] = entry[entry_info['x_axis']]
     context['column_name'] = entry[entry_info['column_name']]
-    context['component'] = entry[entry_info['component']]
     context['output_path'] = entry_info['output_path']
+    if entry_info['component'] != 'empty':
+        context['component'] = entry[entry_info['component']]
+        context['other_comp'] = entry[entry_info['column_name']] - entry[entry_info['component']]
 
     # Render the template with the provided context
     output_html = template.render(context)
@@ -178,9 +170,10 @@ if __name__ == "__main__":
     page_title = "Benchmarking results"
     print('Welcome Message:')
     print('\t Flask code for visualizing benchmark results of the MAX project.')
-    print('\tArguments: file_names or directores, x_axis, column_name, time_unit, component')
+    print('\tArguments: file_names or directores, x_axis, column_name, time_unit, component(any_column or empty)')
     print('\tAuthor: Mandana Safari \n')
     if len(sys.argv) < 2:
+        print('Inserting all the parameters is mandetory (x_axis,column_name,time_unit,component)')
         print('USAGE with directories: python Chart_template.py --directories ./yambo=Nodes,walltime,second,electrons ./qe=Nodes,walltime,second,sth_kernel ...')
         print('USAGE with files: python Chart_templategen.py --files ./yambo/result0.dat=Nodes,walltime,second,sth_kernel ./yambo/result1.dat=Nodes,walltime,second,electrons ...')
         print('More information with: python Chart_template.py --help')
@@ -207,7 +200,7 @@ if __name__ == "__main__":
                 dir_info['x_axis'] = properties[0] or 'Nodes'
                 dir_info['column_name'] = properties[1] or 'walltime'
                 dir_info['time_unit'] = properties[2] or 'second'
-                dir_info['component'] = properties[3] if properties[3] != 'empty' else None
+                dir_info['component'] = properties[3] or 'empty'
 
             # Extract code from the folder structure
             code = None
@@ -246,7 +239,7 @@ if __name__ == "__main__":
                 file_info['x_axis'] = properties[0] or 'Nodes'
                 file_info['column_name'] = properties[1] or 'walltime'
                 file_info['time_unit'] = properties[2] or 'second'
-                file_info['component'] = properties[3] if properties[3] != 'empty' else None
+                file_info['component'] = properties[3] or 'empty'
 
             # Extract code from the folder structure
             code = None
