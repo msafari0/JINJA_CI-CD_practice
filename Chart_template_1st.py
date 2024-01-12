@@ -92,15 +92,22 @@ def render_template(template_path, entry, entry_info, context):
         output_file.write(output_html)
 
 
-def gen_index():
+def gen_index(flist):
     entries = {}
+    #n=0
+    for filename in flist:
+        _, basename = os.path.split(filename)
+        name, _ = os.path.splitext(basename)
+        entries[name+'.html'] = name
+        #entries[name+f'{n}'+'.html'] = name+f'{n}'
+        #n+=1
     with open ('index.html', 'w') as f:
         f.write(render_index('templates/index.tmpl', {'entries': entries}))
         
-def gen_qe(flist_qe):
+def gen_qe(flist):
     entries = {}
     #n=0
-    for filename in flist_qe:
+    for filename in flist:
         _, basename = os.path.split(filename)
         name, _ = os.path.splitext(basename)
         entries[name+'.html'] = name
@@ -109,10 +116,10 @@ def gen_qe(flist_qe):
     with open ('qe.html', 'w') as f:
         f.write(render_qe('templates/qe.tmpl', {'entries': entries}))
         
-def gen_yambo(flist_yambo):
+def gen_yambo(flist):
     entries = {}
     #n=0
-    for filename in flist_yambo:
+    for filename in flist:
         _, basename = os.path.split(filename)
         name, _ = os.path.splitext(basename)
         entries[name+'.html'] = name
@@ -152,7 +159,7 @@ def dataframes_maker(dataframes_list, **kwargs):
     for num, df_dict in enumerate(dataframes_list, start=1):
         df_name = f'df_{num}'
         dataframe = pd.read_csv(df_dict['filename'])
-        code_name= code_recogniser(df_dict['filename'], keywords_to_search)
+        
         # Add new information to the dataframe dictionary
         dataframe_info = {
             'dataframe': dataframe,
@@ -161,7 +168,7 @@ def dataframes_maker(dataframes_list, **kwargs):
             'time_unit': df_dict['time_unit'],
             'component': df_dict['component'],
             'code': code_recogniser(df_dict['filename'], keywords_to_search),
-            'output_path': kwargs.get('output_path', f'./output_chart{num}_{code_name}.html'),
+            'output_path': kwargs.get('output_path', f'./output_chart{num}.html'),
             #'column_names': {df_dict['column_name']: ' '},  # Adjust as needed
         }
         
@@ -172,68 +179,52 @@ def dataframes_maker(dataframes_list, **kwargs):
 
     return loaded_dataframes
 
-
 if __name__ == "__main__":
     # Define the data for filling in the template
     page_title = "Benchmarking results"
     print('Welcome Message:')
     print('\t Flask code for visualizing benchmark results of the MAX project.')
-    print('\tArguments: file_names or directores, x_axis, column_name, time_unit, component')
-    print('\tAuthor: Mandana Safari \n')
-    if len(sys.argv) < 2:
-        print('USAGE with directories: python Chart_template.py --directories ./yambo=Nodes,walltime,second,electrons ./qe=Nodes,walltime,second,sth_kernel ...')
-        print('USAGE with files: python Chart_templategen.py --files ./yambo/result0.dat=Nodes,walltime,second,sth_kernel ./yambo/result1.dat=Nodes,walltime,second,electrons ...')
-        print('More information with: python Chart_template.py --help')
+    print('Arguments:')
+    print('\tfile_names path, x_axis, column_name, time_unit, component')
+    print('More information with: python Chart_template.py --help')
+    print('Author: Mandana Safari \n')
+
+
     
-    # Modify the argument parsing logic
     parser = argparse.ArgumentParser(description='Flask code for visualizing benchmark results of the MAX project.')
-    parser.add_argument('--files', nargs='+', type=str, help='List of file specifications with associated x_axis, column_name, time_unit, and component (use equal sign to separate file path and arguments)')
-    parser.add_argument('--directories', '-dirs', nargs='+', type=str, help='List of directories specifications with associated x_axis, column_name, time_unit, and component (use equal sign to separate directory and arguments)')
+    parser.add_argument('--directory', '-d', type=str, help='Path to the directory containing files')
+    parser.add_argument('--files', nargs='+', type=str, help='List of file paths with associated x_axis, column_name, time_unit, and component (use equal sign to separate file path and arguments)')
+    parser.add_argument('--x_axis', type=str, help='X-axis variable (optional) for all the files in a directory')
+    parser.add_argument('--column_name', type=str, help='Column name for plotting (optional) for all the files in a directory')
+    parser.add_argument('--time_unit', type=str, help='Time unit for plotting (optional) for all the files in a directory')
+    parser.add_argument('--component', nargs='+', type=str, help='Component for plotting (optional) for all the files in a directory')
 
     args = parser.parse_args()
-
-    dataframes_list = []
+    
+    dataframes_list=[]
 
     keywords_to_search = ['yambo', 'qe', 'othercode']
-
-    if args.directories:
-        for dir_spec in args.directories:
-            dir_info = {}
-            dir_parts = dir_spec.split('=')
-            dir_info['directory'] = dir_parts[0]
-
-            if len(dir_parts) > 1:
-                properties = dir_parts[1].split(',')
-                dir_info['x_axis'] = properties[0] or 'Nodes'
-                dir_info['column_name'] = properties[1] or 'walltime'
-                dir_info['time_unit'] = properties[2] or 'second'
-                dir_info['component'] = properties[3] if properties[3] != 'empty' else None
-
-            # Extract code from the folder structure
-            code = None
-
-            code = code_recogniser(dir_info['directory'], keywords_to_search)
-
-            dir_info['code'] = code
+    
+    if args.directory:
+        file_count, files = count_files(args.directory)
+        if file_count == -1:
+            print(f"Error: Unable to access or find the directory {args.directory}.")
+        else:
+            print(f"The number of files in the directory {args.directory} is: {file_count}")
+            #process_files(files, args.x_axis, args.column_name, args.time_unit, args.component)
+            for file_path in files:
+                print(f"Processing file: {file_path}")
+                x_axis = args.x_axis or 'Nodes'
+                column_name = args.column_name or 'walltime'
+                time_unit = args.time_unit or 'second'
+                component = args.component or 'empty'
                 
-            #dataframes_list.append(dir_info)
+                # Extract code from the folder structure
+                code = None
 
-
-            file_count, files = count_files(dir_info['directory'])
-            if file_count == -1:
-                print(f"Error: Unable to access or find the directory {dir_info['directory']}.")
-            else:
-                print(f"The number of files in the directory {dir_info['directory']} is: {file_count}")
-                for file_path in files:
-                    print(f"Processing file: {file_path}")
-                    x_axis = dir_info['x_axis'] or 'Nodes'
-                    column_name = dir_info['column_name'] or 'walltime'
-                    time_unit = dir_info['time_unit'] or 'second'
-                    component = dir_info['component'] or 'empty'
-
-                    # Extract code from the folder structure
-                    code = code_recogniser(dir_info['directory'], keywords_to_search)
-                    dataframes_list.append({'filename': os.path.join(dir_info['directory'], file_path), 'x_axis': x_axis, 'column_name': column_name, 'time_unit': time_unit, 'component': component, 'code': code})
+                code = code_recogniser(args.directory, keywords_to_search)
+                # Add your logic to use x_axis, column_name, time_unit, and component for each file
+                dataframes_list.append({'filename': args.directory+'/'+file_path, 'x_axis': x_axis, 'column_name': column_name, 'time_unit': time_unit, 'component': component, 'code': code})
 
     elif args.files:
         for file_spec in args.files:
@@ -256,10 +247,11 @@ if __name__ == "__main__":
             file_info['code'] = code
                 
             dataframes_list.append(file_info)
-    else:
-        print("Please provide either --directories or --files as arguments.")
 
-    print(dataframes_list)
+    else:
+        print("Please provide either --directory or file paths as arguments.")
+
+    #print(dataframes_list)
 
     loaded_dataframes = dataframes_maker(dataframes_list)
 
@@ -268,8 +260,7 @@ if __name__ == "__main__":
         'page_title': page_title,
     }
     # Render the template and save the output HTML
-    filenames_qe = []
-    filenames_yambo = []
+    filenames = []
     # Accessing the dataframes and associated information
     for df_name, df_info in loaded_dataframes.items():
         dataframe = df_info['dataframe']
@@ -285,16 +276,13 @@ if __name__ == "__main__":
         #print(dataframe)
         #render_template("templates/chart_modify.tmpl", output_path, context, dataframe=dataframe, column_name = column_name)
         render_template("templates/chart_modify.tmpl", dataframe, df_info, context)
-        if code=='qe':
-            filenames_qe.append(output_path)
-        if code=='yambo':
-            filenames_yambo.append(output_path)
+        filenames.append(output_path)
 
-    gen_index()
-    gen_qe(filenames_qe)
-    gen_yambo(filenames_yambo)
+    gen_index(filenames)
+    gen_qe(filenames)
+    gen_yambo(filenames)
     
-    print(f"Template has been rendered and saved to {filenames_yambo} and {filenames_qe}")
+    print(f"Template has been rendered and saved to {filenames}")
 #it works!
     
     
