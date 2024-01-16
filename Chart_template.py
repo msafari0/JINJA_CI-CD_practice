@@ -55,15 +55,18 @@ def render_template(template_path, entry, entry_info, context):
 
     template_env.filters['load_csv_data'] = load_csv_data
 
-    def to_list(series):
-        return series.tolist()
+    def to_list(series, format_numbers=False):
+        if format_numbers:
+            return [float(f'{num:.2f}') for num in series.tolist()]
+        else:
+            return series.tolist()
     
     template_env.filters['to_list'] = to_list
 
     context['Lx_axis'] = entry_info['x_axis']
     context['Lcolumn_name'] = entry_info['column_name']
     context['Lcomponent'] = entry_info['component']
-
+    context['system'] = entry_info['system']
     # Load the template
     template = template_env.get_template(os.path.basename(template_path))
 
@@ -138,6 +141,20 @@ def code_recogniser(file_path, keywords):
     else:
         print(f"No specified keywords found in the file path.")
         return None
+    
+import os
+
+def struct_recogniser(file_path, position):
+    # Extract the folder names from the file path
+    folders = file_path.split(os.path.sep)
+
+    # Check if the specified position is valid
+    if 0 <= position < len(folders):
+        return folders[position]
+    else:
+        print(f"Invalid position {position}. Please provide a valid position.")
+        return None
+
 
 def dataframes_maker(dataframes_list, **kwargs):
     loaded_dataframes = {}
@@ -145,6 +162,7 @@ def dataframes_maker(dataframes_list, **kwargs):
         df_name = f'df_{num}'
         dataframe = pd.read_csv(df_dict['filename'])
         code_name= code_recogniser(df_dict['filename'], keywords_to_search)
+        system= struct_recogniser(df_dict['filename'], position=2)
         # Add new information to the dataframe dictionary
         dataframe_info = {
             'dataframe': dataframe,
@@ -152,8 +170,9 @@ def dataframes_maker(dataframes_list, **kwargs):
             'column_name': df_dict['column_name'],
             'time_unit': df_dict['time_unit'],
             'component': df_dict['component'],
-            'code': code_recogniser(df_dict['filename'], keywords_to_search),
-            'output_path': kwargs.get('output_path', f'./output_chart{num}_{code_name}.html'),
+            'code': code_name,
+            'system': system,
+            'output_path': kwargs.get('output_path', f'./output_chart{num}_{code_name}_{system}.html'),
             #'column_names': {df_dict['column_name']: ' '},  # Adjust as needed
         }
         
@@ -226,7 +245,13 @@ if __name__ == "__main__":
 
                     # Extract code from the folder structure
                     code = code_recogniser(dir_info['directory'], keywords_to_search)
-                    dataframes_list.append({'filename': os.path.join(dir_info['directory'], file_path), 'x_axis': x_axis, 'column_name': column_name, 'time_unit': time_unit, 'component': component, 'code': code})
+                    system_structure_name = struct_recogniser(dir_info['directory'], position=2)
+                    if not system_structure_name:
+                        #print(f"System structure name: {system_structure_name}")
+                        system_structure_name = 'empty'
+                        #print("No system structure name found.")
+
+                    dataframes_list.append({'filename': os.path.join(dir_info['directory'], file_path), 'x_axis': x_axis, 'column_name': column_name, 'time_unit': time_unit, 'component': component, 'code': code, 'system':system_structure_name})
 
     elif args.files:
         for file_spec in args.files:
@@ -245,9 +270,14 @@ if __name__ == "__main__":
             code = None
 
             code = code_recogniser(file_info['filename'], keywords_to_search)
-
+            system_structure_name = struct_recogniser(file_info['filename'], position=2)
             file_info['code'] = code
-                
+            file_info['system'] = system_structure_name
+            if not system_structure_name:
+                # print(f"System structure name: {system_structure_name}")
+                system_structure_name = 'empty'
+                #print("No system structure name found.")
+
             dataframes_list.append(file_info)
     else:
         print("Please provide either --directories or --files as arguments.")
@@ -286,7 +316,7 @@ if __name__ == "__main__":
     gen_index()
     gen_qe(filenames_qe)
     gen_yambo(filenames_yambo)
-    
+
     print(f"Template has been rendered and saved to {filenames_yambo} and {filenames_qe}")
 #it works!
     

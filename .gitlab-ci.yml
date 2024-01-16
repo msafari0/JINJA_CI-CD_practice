@@ -18,7 +18,7 @@ pages:
     - pip install pandas
   script:
     - mkdir public
-    - python Chart_template.py --files ./qe/results.dat=Nodes,walltime,second,sth_kernel ./yambo/result1.dat=Nodes,walltime,second,electrons ./yambo/result0.dat=Nodes,walltime,second,electrons
+    - python Chart_template.py --files ./qe/ausurf/results.dat=Nodes,walltime,second,sth_kernel ./yambo/Nickel/result1.dat=Nodes,walltime,second,electrons ./yambo/Nickel/result0.dat=Nodes,walltime,second,electrons
     - mv *.html ./public
     - cp *.jpg ./public
     - cp *.png ./public
