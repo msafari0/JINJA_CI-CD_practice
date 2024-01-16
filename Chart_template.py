@@ -142,7 +142,6 @@ def code_recogniser(file_path, keywords):
         print(f"No specified keywords found in the file path.")
         return None
     
-import os
 
 def struct_recogniser(file_path, position):
     # Extract the folder names from the file path
@@ -162,7 +161,7 @@ def dataframes_maker(dataframes_list, **kwargs):
         df_name = f'df_{num}'
         dataframe = pd.read_csv(df_dict['filename'])
         code_name= code_recogniser(df_dict['filename'], keywords_to_search)
-        system= struct_recogniser(df_dict['filename'], position=2)
+        system= struct_recogniser(df_dict['filename'], position)
         # Add new information to the dataframe dictionary
         dataframe_info = {
             'dataframe': dataframe,
@@ -198,15 +197,18 @@ if __name__ == "__main__":
         print('More information with: python Chart_template.py --help')
     
     # Modify the argument parsing logic
-    parser = argparse.ArgumentParser(description='Flask code for visualizing benchmark results of the MAX project.')
+    parser = argparse.ArgumentParser(description='')
     parser.add_argument('--files', nargs='+', type=str, help='List of file specifications with associated x_axis, column_name, time_unit, and component (use equal sign to separate file path and arguments)')
     parser.add_argument('--directories', '-dirs', nargs='+', type=str, help='List of directories specifications with associated x_axis, column_name, time_unit, and component (use equal sign to separate directory and arguments)')
+    parser.add_argument('--position', type=int, default=2, help='Position parameter for struct_recogniser function')
 
     args = parser.parse_args()
 
     dataframes_list = []
 
     keywords_to_search = ['yambo', 'qe', 'othercode']
+    
+    position = args.position
 
     if args.directories:
         for dir_spec in args.directories:
@@ -245,7 +247,7 @@ if __name__ == "__main__":
 
                     # Extract code from the folder structure
                     code = code_recogniser(dir_info['directory'], keywords_to_search)
-                    system_structure_name = struct_recogniser(dir_info['directory'], position=2)
+                    system_structure_name = struct_recogniser(dir_info['directory'], position)
                     if not system_structure_name:
                         #print(f"System structure name: {system_structure_name}")
                         system_structure_name = 'empty'
@@ -270,7 +272,7 @@ if __name__ == "__main__":
             code = None
 
             code = code_recogniser(file_info['filename'], keywords_to_search)
-            system_structure_name = struct_recogniser(file_info['filename'], position=2)
+            system_structure_name = struct_recogniser(file_info['filename'], position)
             file_info['code'] = code
             file_info['system'] = system_structure_name
             if not system_structure_name:
