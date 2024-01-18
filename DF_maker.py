@@ -30,15 +30,15 @@ def dataframes_maker(dataframes_list, plot='runtime_components', colormap=None, 
     n = 0
 
     for num, df_dict in enumerate(dataframes_list, start=1):
-        #df_name = f'df_{num}'
-        df_name = f'df_{num}_{df_dict["code"][0]}'  # Include code in df_name
+        df_name = f'df_{num}'
+       # df_name = f'df_{num}_{df_dict["code"][0]}'  # Include code in df_name
 
         filename = df_dict['filename']
 
         filename = df_dict['filename']
         time_unit = df_dict['time_unit']
 
-        loaded_dataframes[df_name] = copy.deepcopy(pd.read_csv(filename))
+        loaded_dataframes[df_name] = copy.deepcopy(pd.read_csv(filename, sep=';'))
 
         column_name = df_dict['column_name']
         if column_name not in loaded_dataframes[df_name].columns:
@@ -98,7 +98,7 @@ def dataframes_maker0(dataframes_list, **kwargs):
         dataframe = df_dict
         filename = df_dict['filename']
         time_unit = df_dict['time_unit']
-        loaded_dataframes[df_name] = copy.deepcopy(pd.read_csv(filename))  
+        loaded_dataframes[df_name] = copy.deepcopy(pd.read_csv(filename, sep=';'))  
         
         column_name = df_dict['column_name']
         if column_name not in loaded_dataframes[df_name].columns:

@@ -159,7 +159,7 @@ def dataframes_maker(dataframes_list, **kwargs):
     loaded_dataframes = {}
     for num, df_dict in enumerate(dataframes_list, start=1):
         df_name = f'df_{num}'
-        dataframe = pd.read_csv(df_dict['filename'])
+        dataframe = pd.read_csv(df_dict['filename'], sep=';')
         code_name= code_recogniser(df_dict['filename'], keywords_to_search)
         system= struct_recogniser(df_dict['filename'], position)
         # Add new information to the dataframe dictionary
