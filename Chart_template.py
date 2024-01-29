@@ -44,7 +44,7 @@ def render_yambo(tpl_path, context):
     
     return environment.get_template(filename).render(context)
 
-def render_template(template_path, entry, entry_info, context):
+def render_template(template_path, entry, entry_info, table_columns, context):
     # Load the template environment
     template_loader = jinja2.FileSystemLoader(searchpath=os.path.dirname(template_path))
     template_env = jinja2.Environment(loader=template_loader, autoescape=True)
@@ -62,7 +62,7 @@ def render_template(template_path, entry, entry_info, context):
             return series.tolist()
     
     template_env.filters['to_list'] = to_list
-
+    context['table_columns'] = table_columns
     context['Lx_axis'] = entry_info['x_axis']
     context['Lcolumn_name'] = entry_info['column_name']
     context['Lcomponent'] = entry_info['component']
@@ -78,6 +78,8 @@ def render_template(template_path, entry, entry_info, context):
     if entry_info['component'] != 'empty':
         context['component'] = entry[entry_info['component']]
         context['other_comp'] = entry[entry_info['column_name']] - entry[entry_info['component']]
+    for column in table_columns:
+        context[f'{column}'] = entry[column]
 
     # Render the template with the provided context
     output_html = template.render(context)
@@ -304,12 +306,14 @@ if __name__ == "__main__":
         component = df_info['component']
         code = df_info['code']
         output_path = df_info['output_path']
-
+        table_columns = []
+        for i in range(len(dataframe.columns)):
+            table_columns.append(dataframe.columns[i])
         #print(f"Processing dataframe: {df_name}")
         #print(f"X-axis: {x_axis}, Column Name: {column_name}, Time Unit: {time_unit}, Component: {component}, Code: {code}")
         #print(dataframe)
         #render_template("templates/chart_modify.tmpl", output_path, context, dataframe=dataframe, column_name = column_name)
-        render_template("templates/chart_modify.tmpl", dataframe, df_info, context)
+        render_template("templates/chart_modify.tmpl", dataframe, df_info, table_columns, context)
         if code=='qe':
             filenames_qe.append(output_path)
         if code=='yambo':

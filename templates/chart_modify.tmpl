@@ -45,6 +45,11 @@
     const jsonData = {{ dataframe | load_csv_data | tojson | safe }};
     const nodes = jsonData['{{ Lx_axis }}'].map(String);
     const data1 = jsonData['{{ Lcolumn_name }}'];
+    
+{% for column in table_columns %}
+    const tableD{{ loop.index0 }} = jsonData[{{ column | tojson | safe }}];
+{% endfor %}
+
     const ctx = document.getElementById('myChart').getContext('2d');
     {% if Lcomponent == 'empty' %}
         new Chart(ctx, {
@@ -88,16 +93,7 @@ ctx.fillRect(x - containerWidth / 2, y - containerHeight / 2, containerWidth, co
                 },
             }],
         });
-        
-        const tableData = [];
-	for (let i = 0; i < nodes.length; i++) {
-  	  tableData.push([nodes[i], data1[i]]);
-	}
 
-	new gridjs.Grid({
-  	  columns: ["Nodes","walltime"],
-  	  data: tableData
-	}).render(document.getElementById("table-container"));
 	
     {% else %}
      const data2 = {{ component | to_list | tojson | safe }};
@@ -150,17 +146,27 @@ ctx.fillRect(x - containerWidth / 2, y - containerHeight / 2, containerWidth, co
             }],
         });
      
+    {% endif %}
+    
 const tableData = [];
 for (let i = 0; i < nodes.length; i++) {
-    tableData.push([nodes[i], data1[i], data2[i], data3[i]]);
+    const row = [nodes[i]];
+
+    {% for column in table_columns %}
+        row.push(tableD{{ loop.index0 }}[i]);
+    {% endfor %}
+
+    tableData.push(row);
 }
 
+const columnNames = ["Nodes", {% for column in table_columns %}"{{ column }}", {% endfor %}];
+
 new gridjs.Grid({
-    columns: ["Nodes","walltime", "electrons", "Other Components"],
+    columns: columnNames,
     data: tableData
 }).render(document.getElementById("table-container"));
 
-    {% endif %}
+
     
 </script>
 </body>
